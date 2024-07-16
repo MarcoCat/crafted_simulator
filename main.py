@@ -1,5 +1,5 @@
 import random
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 import matplotlib.pyplot as plt
 
@@ -25,7 +25,7 @@ class Ingredient:
     def roll_attributes(self):
         rolled_values = {}
         for attribute in self.attributes:
-            rolled_value = round(attribute.roll() * self.multiplier)
+            rolled_value = int(attribute.roll() * self.multiplier)
             if attribute.name in rolled_values:
                 rolled_values[attribute.name] += rolled_value
             else:
@@ -100,6 +100,16 @@ def plot_simulation_results(results):
         plt.show()
 
 
+def calculate_and_display_percentages(simulation_results, num_simulations):
+    for name, values in simulation_results.items():
+        value_counts = Counter(values)
+        sorted_value_counts = dict(sorted(value_counts.items()))
+        print(f"\n{name} Distribution (sorted by value):")
+        for value, count in sorted_value_counts.items():
+            percentage = (count / num_simulations) * 100
+            print(f"Value {value}: {percentage:.2f}%")
+
+
 if __name__ == "__main__":
     item = get_user_input()
     num_simulations = int(input("Enter the number of simulations: "))
@@ -108,5 +118,5 @@ if __name__ == "__main__":
     print("Simulation results:")
     for name, values in simulation_results.items():
         print(f"{name}: {values[:5]} ...")  # Print first 5 values as a sample
-
     plot_simulation_results(simulation_results)
+    calculate_and_display_percentages(simulation_results, num_simulations)
